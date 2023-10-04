@@ -25,11 +25,11 @@ public class StudentServiceImpl implements StudentService {
         String paramName="%"+name+"%";
         int offset=(pageNumber-1)*limit;
         return jdbcTemplate.query("SELECT * FROM student st JOIN classes cl ON st.class_id = cl.id" +
-                        " WHERE st.name LIKE ?1 OR st.age = ?2 OR st.gender =?3" +
+                        " WHERE st.name LIKE ?1 OR (YEAR(current_date())-YEAR(st.age)) > ?2 OR st.gender =?3" +
                         " LIMIT ?4  OFFSET ?5",
                 this::mapToStudent,paramName,age,gender,limit, offset);
 //        return entityManager.createNativeQuery("SELECT st.id,st.address,st.age,st.gender,st.name,st.class_id FROM student st JOIN classes as cl ON st.class_id = cl.id" +
-//                " WHERE st.name LIKE ? OR st.age = ? OR st.gender =?" +
+//                " WHERE st.name LIKE ? OR (YEAR(current_date())-YEAR(st.age)) > ? OR st.gender =?" +
 //                " LIMIT ?  OFFSET ?")
 //                .setParameter(1,paramName)
 //                .setParameter(2,age)
@@ -49,7 +49,7 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> filterByNameOrAgeOrGender(String name, int age, String gender, Pageable pageable) {
                 String paramName="%"+name+"%";
                 return entityManager.createQuery("SELECT st FROM Student st JOIN Classes as cl ON st.classes.id = cl.id" +
-                " WHERE st.name LIKE ?1 OR st.age = ?2 OR st.gender =?3")
+                " WHERE st.name LIKE ?1 OR (YEAR(current_date())-YEAR(st.age)) > ?2 OR st.gender =?3")
                 .setParameter(1,paramName)
                 .setParameter(2,age)
                 .setParameter(3,gender)
@@ -70,7 +70,7 @@ public class StudentServiceImpl implements StudentService {
         return Student.builder()
                 .id(rs.getLong("id"))
                 .name(rs.getString("name"))
-                .age(rs.getInt("age"))
+                .age(rs.getString("age"))
                 .gender(rs.getString("gender"))
                 .address(rs.getString("address"))
                 .classes(classes)

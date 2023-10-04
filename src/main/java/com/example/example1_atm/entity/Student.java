@@ -18,7 +18,7 @@ public class Student {
     @Column(name = "name")
     private String name;
     @Column(name="age")
-    private int age;
+    private String age;
     @Column(name="gender")
     private String gender;
     @Column(name = "address")

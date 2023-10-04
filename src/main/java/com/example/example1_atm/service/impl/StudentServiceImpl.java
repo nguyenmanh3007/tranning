@@ -49,7 +49,7 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> filterByNameOrAgeOrGender(String name, int age, String gender, Pageable pageable) {
                 String paramName="%"+name+"%";
                 return entityManager.createQuery("SELECT st FROM Student st JOIN Classes as cl ON st.classes.id = cl.id" +
-                " WHERE st.name LIKE ?1 OR (YEAR(current_date())-YEAR(st.age)) > ?2 OR st.gender =?3")
+                " WHERE st.name LIKE ?1 OR TIMESTAMPDIFF( YEAR , st.age, CURDATE())> ?2 OR st.gender =?3")
                 .setParameter(1,paramName)
                 .setParameter(2,age)
                 .setParameter(3,gender)

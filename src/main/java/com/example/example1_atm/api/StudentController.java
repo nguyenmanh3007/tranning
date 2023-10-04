@@ -18,7 +18,7 @@ public class StudentController {
     public ResponseEntity<?>filterStudentByNameAndAgeAndGender(@RequestBody StudentRequest studentRequest
                                                                 ,@RequestParam("pageNumber") int pageNumber
                                                                 ,@RequestParam("limit") int limit){
-        Pageable pageable= PageRequest.of(pageNumber+1,limit);
+        Pageable pageable= PageRequest.of(pageNumber,limit);
         return ResponseEntity.ok(studentService.filterByNameOrAgeOrGender(studentRequest.getName(),studentRequest.getAge()
                                                                         ,studentRequest.getGender(),
                                                                         pageable));
